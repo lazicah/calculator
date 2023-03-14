@@ -31,6 +31,13 @@ class CalculatorView extends StatefulWidget {
 class _CalculatorViewState extends State<CalculatorView> {
   late TextEditingController _textEditingController;
   late FocusNode _focusNode;
+  List<String> symbols = [
+    '+',
+    '-',
+    '/',
+    '*',
+    '%',
+  ];
 
   String _lastExpression = '';
 
@@ -50,6 +57,7 @@ class _CalculatorViewState extends State<CalculatorView> {
   void _onButtonPressed(ButtonType type, {String? value}) {
     final calculatorCubit = context.read<CalculatorCubit>();
     _lastExpression = _textEditingController.text;
+
     switch (type) {
       case ButtonType.number:
         _lastExpression += value!;
@@ -62,33 +70,52 @@ class _CalculatorViewState extends State<CalculatorView> {
       case ButtonType.bracket:
         if (_lastExpression.isNotEmpty) {
           // Check if the last character is a number
-          final lenght = _lastExpression.length;
-          final lastChar = _lastExpression[lenght - 1];
         } else {
           _lastExpression += ' ( ';
         }
 
         break;
       case ButtonType.percentage:
-        if (_lastExpression.isNotEmpty) _lastExpression += ' % ';
+        if (_lastExpression.isNotEmpty) {
+          final lenght = _lastExpression.trim().length;
+          final lastChar = _lastExpression.trim()[lenght - 1];
+          if (!symbols.contains(lastChar)) _lastExpression += '% ';
+        }
         break;
       case ButtonType.division:
-        if (_lastExpression.isNotEmpty) _lastExpression += ' / ';
+        if (_lastExpression.isNotEmpty) {
+          final lenght = _lastExpression.trim().length;
+          final lastChar = _lastExpression.trim()[lenght - 1];
+          if (!symbols.contains(lastChar)) _lastExpression += ' / ';
+        }
         break;
       case ButtonType.multiplication:
-        if (_lastExpression.isNotEmpty) _lastExpression += ' * ';
+        if (_lastExpression.isNotEmpty) {
+          final lenght = _lastExpression.trim().length;
+          final lastChar = _lastExpression.trim()[lenght - 1];
+          if (!symbols.contains(lastChar)) _lastExpression += ' * ';
+        }
         break;
       case ButtonType.subtraction:
-        if (_lastExpression.isNotEmpty) _lastExpression += ' - ';
+        if (_lastExpression.isNotEmpty) {
+          final lenght = _lastExpression.trim().length;
+          final lastChar = _lastExpression.trim()[lenght - 1];
+          if (!symbols.contains(lastChar)) _lastExpression += ' - ';
+        }
         break;
       case ButtonType.addition:
-        if (_lastExpression.isNotEmpty) _lastExpression += ' + ';
+        if (_lastExpression.isNotEmpty) {
+          final lenght = _lastExpression.trim().length;
+          final lastChar = _lastExpression.trim()[lenght - 1];
+          if (!symbols.contains(lastChar)) _lastExpression += ' + ';
+        }
         break;
       case ButtonType.decimal:
         if (_lastExpression.isEmpty) {
           _lastExpression += '0.';
         } else {
-          _lastExpression += '.';
+          final exp = _lastExpression.trim();
+          if (!exp.contains('.')) _lastExpression += '.';
         }
         break;
       case ButtonType.negative:
@@ -161,6 +188,7 @@ class _CalculatorViewState extends State<CalculatorView> {
                                 _lastExpression.isNotEmpty
                                     ? '${state.result}'
                                     : '',
+                                textAlign: TextAlign.end,
                                 style: theme.textTheme.headlineLarge!
                                     .copyWith(color: Colors.black),
                               );
